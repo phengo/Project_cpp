@@ -1,12 +1,11 @@
-
 #include <iostream>
 #include <string>
 using namespace std;
 
-
 // ==================== SONG ====================
 
-struct Song {
+struct Song
+{
     int id;
     string title;
     string artist;
@@ -14,41 +13,42 @@ struct Song {
     string duration;
 };
 
-
 // ==================== DOUBLY LINKED LIST NODE ====================
 
-struct Node {
+struct Node
+{
     Song song;
 
-    Node* next;
-    Node* prev;
+    Node *next;
+    Node *prev;
 };
-
 
 // ==================== PLAYLIST ====================
 
-class Playlist {
+class Playlist
+{
 private:
-    Node* head;
-    Node* tail;
+    Node *head;
+    Node *tail;
 
 public:
-
     // Constructor
-    Playlist() {
+    Playlist()
+    {
         head = NULL;
         tail = NULL;
     }
 
-
     // Destructor
-    ~Playlist() {
+    ~Playlist()
+    {
 
-        Node* current = head;
+        Node *current = head;
 
-        while (current != NULL) {
+        while (current != NULL)
+        {
 
-            Node* temp = current;
+            Node *temp = current;
 
             current = current->next;
 
@@ -56,10 +56,10 @@ public:
         }
     }
 
-
     // ==================== CREATE ====================
 
-    void addSong() {
+    void addSong()
+    {
 
         Song song;
 
@@ -81,24 +81,24 @@ public:
         cout << "Enter duration (example 3:45): ";
         getline(cin, song.duration);
 
-
-        Node* newNode = new Node;
+        Node *newNode = new Node;
 
         newNode->song = song;
 
         newNode->next = NULL;
         newNode->prev = NULL;
 
-
         // If playlist is empty
-        if (head == NULL) {
+        if (head == NULL)
+        {
 
             head = newNode;
             tail = newNode;
         }
 
         // If playlist already has songs
-        else {
+        else
+        {
 
             tail->next = newNode;
 
@@ -110,23 +110,24 @@ public:
         cout << "Song added successfully!\n";
     }
 
-
     // ==================== READ ====================
 
-    void displaySongs() {
+    void displaySongs()
+    {
 
         cout << "\n===== PLAYLIST =====\n";
 
-        if (head == NULL) {
+        if (head == NULL)
+        {
 
             cout << "Playlist is empty.\n";
             return;
         }
 
+        Node *current = head;
 
-        Node* current = head;
-
-        while (current != NULL) {
+        while (current != NULL)
+        {
 
             cout << "ID: " << current->song.id << endl;
             cout << "Title: " << current->song.title << endl;
@@ -140,10 +141,10 @@ public:
         }
     }
 
-
     // ==================== SEARCH ====================
 
-    void searchSong() {
+    void searchSong()
+    {
 
         int id;
 
@@ -152,12 +153,13 @@ public:
         cout << "Enter song ID: ";
         cin >> id;
 
+        Node *current = head;
 
-        Node* current = head;
+        while (current != NULL)
+        {
 
-        while (current != NULL) {
-
-            if (current->song.id == id) {
+            if (current->song.id == id)
+            {
 
                 cout << "\nSong found!\n";
 
@@ -176,10 +178,10 @@ public:
         cout << "Song not found.\n";
     }
 
-
     // ==================== UPDATE ====================
 
-    void updateSong() {
+    void updateSong()
+    {
 
         int id;
 
@@ -190,12 +192,13 @@ public:
 
         cin.ignore();
 
+        Node *current = head;
 
-        Node* current = head;
+        while (current != NULL)
+        {
 
-        while (current != NULL) {
-
-            if (current->song.id == id) {
+            if (current->song.id == id)
+            {
 
                 cout << "Enter new title: ";
                 getline(cin, current->song.title);
@@ -209,7 +212,6 @@ public:
                 cout << "Enter new duration: ";
                 getline(cin, current->song.duration);
 
-
                 cout << "Song updated successfully!\n";
 
                 return;
@@ -221,10 +223,10 @@ public:
         cout << "Song not found.\n";
     }
 
-
     // ==================== DELETE ====================
 
-    void deleteSong() {
+    void deleteSong()
+    {
 
         int id;
 
@@ -233,42 +235,48 @@ public:
         cout << "Enter song ID: ";
         cin >> id;
 
+        Node *current = head;
 
-        Node* current = head;
+        while (current != NULL)
+        {
 
-        while (current != NULL) {
-
-            if (current->song.id == id) {
-
+            if (current->song.id == id)
+            {
 
                 // If deleting the first node
-                if (current == head) {
+                if (current == head)
+                {
 
                     head = current->next;
 
-                    if (head != NULL) {
+                    if (head != NULL)
+                    {
                         head->prev = NULL;
+                    }
+                    else
+                    {
+                        // current was also the tail (list is now empty)
+                        tail = NULL;
                     }
                 }
 
-
-                // If deleting the last node
-                else if (current == tail) {
+                // If deleting the last node (and not the head)
+                else if (current == tail)
+                {
 
                     tail = current->prev;
 
                     tail->next = NULL;
                 }
 
-
                 // If deleting a middle node
-                else {
+                else
+                {
 
                     current->prev->next = current->next;
 
                     current->next->prev = current->prev;
                 }
-
 
                 delete current;
 
@@ -283,40 +291,39 @@ public:
         cout << "Song not found.\n";
     }
 
-
     // ==================== BUBBLE SORT ====================
 
-    void sortSongs() {
+    void sortSongs()
+    {
 
-        if (head == NULL || head->next == NULL) {
+        if (head == NULL || head->next == NULL)
+        {
 
             cout << "Not enough songs to sort.\n";
 
             return;
         }
 
-
         bool swapped;
 
-
-        do {
+        do
+        {
 
             swapped = false;
 
-            Node* current = head;
+            Node *current = head;
 
+            while (current->next != NULL)
+            {
 
-            while (current->next != NULL) {
-
-                if (current->song.title > current->next->song.title) {
-
+                if (current->song.title > current->next->song.title)
+                {
 
                     Song temp = current->song;
 
                     current->song = current->next->song;
 
                     current->next->song = temp;
-
 
                     swapped = true;
                 }
@@ -326,21 +333,21 @@ public:
 
         } while (swapped);
 
-
         cout << "Playlist sorted by title successfully!\n";
     }
 
-
     // ==================== FIND SONG ====================
 
-    Song* findSong(int id) {
+    Song *findSong(int id)
+    {
 
-        Node* current = head;
+        Node *current = head;
 
+        while (current != NULL)
+        {
 
-        while (current != NULL) {
-
-            if (current->song.id == id) {
+            if (current->song.id == id)
+            {
 
                 return &current->song;
             }
@@ -348,108 +355,102 @@ public:
             current = current->next;
         }
 
-
         return NULL;
     }
 
-
     // ==================== FORWARD ====================
 
-    void displayForward() {
+    void displayForward()
+    {
 
         cout << "\n===== FORWARD =====\n";
 
-
-        if (head == NULL) {
+        if (head == NULL)
+        {
 
             cout << "Playlist is empty.\n";
 
             return;
         }
 
+        Node *current = head;
 
-        Node* current = head;
-
-
-        while (current != NULL) {
+        while (current != NULL)
+        {
 
             cout << current->song.title
                  << " - "
                  << current->song.artist
                  << endl;
-
 
             current = current->next;
         }
     }
 
-
     // ==================== BACKWARD ====================
 
-    void displayBackward() {
+    void displayBackward()
+    {
 
         cout << "\n===== BACKWARD =====\n";
 
-
-        if (tail == NULL) {
+        if (tail == NULL)
+        {
 
             cout << "Playlist is empty.\n";
 
             return;
         }
 
+        Node *current = tail;
 
-        Node* current = tail;
-
-
-        while (current != NULL) {
+        while (current != NULL)
+        {
 
             cout << current->song.title
                  << " - "
                  << current->song.artist
                  << endl;
-
 
             current = current->prev;
         }
     }
 };
 
-
 // ==================== QUEUE ====================
 
-struct QueueNode {
+struct QueueNode
+{
 
     Song song;
 
-    QueueNode* next;
+    QueueNode *next;
 };
 
-
-class PlayQueue {
+class PlayQueue
+{
 
 private:
-
-    QueueNode* front;
-    QueueNode* rear;
-
+    QueueNode *front;
+    QueueNode *rear;
 
 public:
-
     // Constructor
-    PlayQueue() {
+    PlayQueue()
+    {
 
         front = NULL;
         rear = NULL;
     }
 
-
     // Destructor
-    ~PlayQueue() {
+    ~PlayQueue()
+    {
 
-        while (front != NULL) {
+        while (front != NULL)
+        {
 
-            QueueNode* temp = front;
+            QueueNode *temp = front;
 
             front = front->next;
 
@@ -457,134 +458,127 @@ public:
         }
     }
 
-
     // Add song to queue
-    void enqueue(Song song) {
+    void enqueue(Song song)
+    {
 
-        QueueNode* newNode = new QueueNode;
+        QueueNode *newNode = new QueueNode;
 
         newNode->song = song;
 
         newNode->next = NULL;
 
-
-        if (rear == NULL) {
+        if (rear == NULL)
+        {
 
             front = newNode;
 
             rear = newNode;
         }
 
-        else {
+        else
+        {
 
             rear->next = newNode;
 
             rear = newNode;
         }
 
-
         cout << "Song added to play queue.\n";
     }
 
-
     // Play next song
-    Song* dequeue() {
+    Song *dequeue()
+    {
 
-        if (front == NULL) {
+        if (front == NULL)
+        {
 
             cout << "Play queue is empty.\n";
 
             return NULL;
         }
 
+        QueueNode *temp = front;
 
-        QueueNode* temp = front;
-
-
-        Song* playedSong = new Song;
+        Song *playedSong = new Song;
 
         *playedSong = temp->song;
 
-
         front = front->next;
 
-
-        if (front == NULL) {
+        if (front == NULL)
+        {
 
             rear = NULL;
         }
 
-
         delete temp;
-
 
         return playedSong;
     }
 
-
     // Display queue
-    void displayQueue() {
+    void displayQueue()
+    {
 
         cout << "\n===== PLAY QUEUE =====\n";
 
-
-        if (front == NULL) {
+        if (front == NULL)
+        {
 
             cout << "Queue is empty.\n";
 
             return;
         }
 
+        QueueNode *current = front;
 
-        QueueNode* current = front;
-
-
-        while (current != NULL) {
+        while (current != NULL)
+        {
 
             cout << current->song.title
                  << " - "
                  << current->song.artist
                  << endl;
 
-
             current = current->next;
         }
     }
 };
 
-
 // ==================== STACK ====================
 
-struct StackNode {
+struct StackNode
+{
 
     Song song;
 
-    StackNode* next;
+    StackNode *next;
 };
 
-
-class RecentlyPlayed {
+class RecentlyPlayed
+{
 
 private:
-
-    StackNode* top;
-
+    StackNode *top;
 
 public:
-
     // Constructor
-    RecentlyPlayed() {
+    RecentlyPlayed()
+    {
 
         top = NULL;
     }
 
-
     // Destructor
-    ~RecentlyPlayed() {
+    ~RecentlyPlayed()
+    {
 
-        while (top != NULL) {
+        while (top != NULL)
+        {
 
-            StackNode* temp = top;
+            StackNode *temp = top;
 
             top = top->next;
 
@@ -592,11 +586,12 @@ public:
         }
     }
 
-
     // Push
-    void push(Song song) {
+    void push(Song song)
+    {
 
-        StackNode* newNode = new StackNode;
+        StackNode *newNode = new StackNode;
+        
 
         newNode->song = song;
 
@@ -605,67 +600,62 @@ public:
         top = newNode;
     }
 
-
     // Pop
-    void pop() {
+    void pop()
+    {
 
-        if (top == NULL) {
+        if (top == NULL)
+        {
 
             cout << "No recently played songs.\n";
 
             return;
         }
 
-
-        StackNode* temp = top;
-
+        StackNode *temp = top;
 
         cout << "Removed: "
              << temp->song.title
              << endl;
 
-
         top = top->next;
-
 
         delete temp;
     }
 
-
     // Display
-    void display() {
+    void display()
+    {
 
         cout << "\n===== RECENTLY PLAYED =====\n";
 
-
-        if (top == NULL) {
+        if (top == NULL)
+        {
 
             cout << "No recently played songs.\n";
 
             return;
         }
 
+        StackNode *current = top;
 
-        StackNode* current = top;
-
-
-        while (current != NULL) {
+        while (current != NULL)
+        {
 
             cout << current->song.title
                  << " - "
                  << current->song.artist
                  << endl;
 
-
             current = current->next;
         }
     }
 };
 
-
 // ==================== MAIN ====================
 
-int main() {
+int main()
+{
 
     Playlist playlist;
 
@@ -673,11 +663,10 @@ int main() {
 
     RecentlyPlayed recentlyPlayed;
 
-
     int choice;
 
-
-    do {
+    do
+    {
 
         cout << "\n====================================\n";
         cout << "     MUSIC PLAYLIST MANAGEMENT\n";
@@ -698,14 +687,12 @@ int main() {
         cout << "13. Remove Recent Song\n";
         cout << "0. Exit\n";
 
-
         cout << "\nEnter your choice: ";
 
         cin >> choice;
 
-
-        switch (choice) {
-
+        switch (choice)
+        {
 
         case 1:
 
@@ -713,13 +700,11 @@ int main() {
 
             break;
 
-
         case 2:
 
             playlist.displaySongs();
 
             break;
-
 
         case 3:
 
@@ -727,13 +712,11 @@ int main() {
 
             break;
 
-
         case 4:
 
             playlist.updateSong();
 
             break;
-
 
         case 5:
 
@@ -741,13 +724,11 @@ int main() {
 
             break;
 
-
         case 6:
 
             playlist.sortSongs();
 
             break;
-
 
         case 7:
 
@@ -755,48 +736,43 @@ int main() {
 
             break;
 
-
         case 8:
 
             playlist.displayBackward();
 
             break;
 
-
         case 9:
         {
             int id;
-
 
             cout << "\nEnter song ID to add to queue: ";
 
             cin >> id;
 
+            Song *song = playlist.findSong(id);
 
-            Song* song = playlist.findSong(id);
-
-
-            if (song != NULL) {
+            if (song != NULL)
+            {
 
                 playQueue.enqueue(*song);
             }
 
-            else {
+            else
+            {
 
                 cout << "Song not found.\n";
             }
 
-
             break;
         }
 
-
         case 10:
         {
-            Song* song = playQueue.dequeue();
+            Song *song = playQueue.dequeue();
 
-
-            if (song != NULL) {
+            if (song != NULL)
+            {
 
                 cout << "\nNow Playing: "
                      << song->title
@@ -804,17 +780,13 @@ int main() {
                      << song->artist
                      << endl;
 
-
                 recentlyPlayed.push(*song);
-
 
                 delete song;
             }
 
-
             break;
         }
-
 
         case 11:
 
@@ -822,13 +794,11 @@ int main() {
 
             break;
 
-
         case 12:
 
             recentlyPlayed.display();
 
             break;
-
 
         case 13:
 
@@ -836,23 +806,18 @@ int main() {
 
             break;
 
-
         case 0:
 
             cout << "\nThank you for using Music Playlist Management System!\n";
 
             break;
 
-
         default:
 
             cout << "Invalid choice. Please try again.\n";
         }
 
-
     } while (choice != 0);
-
 
     return 0;
 }
-```
